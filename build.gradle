@@ -1,0 +1,58 @@
+plugins {
+    id 'org.springframework.boot' version '1.5.4.RELEASE'
+}
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+version = '0.0.1'
+def apiJavalibVersion = '1.7.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+	flatDir {
+    	dirs 'lib'
+    }
+}
+
+def apiJavalibFile = new File(projectDir.getAbsolutePath() + '/lib/api-javalib-' + apiJavalibVersion + '.jar')
+if (!apiJavalibFile.exists()) {
+    new URL("https://github.com/antoine-aumjaud/api-javalib/releases/download/v${apiJavalibVersion}/api-javalib-${apiJavalibVersion}.jar")
+    	.withInputStream { is -> apiJavalibFile.withOutputStream{ it << is }}
+}
+
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat" //remove tomcat, use jetty
+}
+
+dependencies {
+	compile name: 'api-javalib', version: apiJavalibVersion
+	//Transitive dependencies
+    compile 'org.slf4j:slf4j-api:1.7.25'
+	compile 'com.google.code.gson:gson:2.8.0'
+    //
+    //Spring boot
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-jetty' //use jetty
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+
+    //Other
+    runtime 'ch.qos.logback:logback-classic:1.2.3'
+	testCompile 'junit:junit:4.12'
+}
+
+processResources {
+    filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+        "application.name": project.property("name"),
+        "application.version": project.property("version"),
+        "build.date": new Date().format('yyyy-MM-dd HH:mm:ss')
+    ]
+}
+
+jar {
+    baseName =  project.property("name")
+    version =   project.property("version")
+}
