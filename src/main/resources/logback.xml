@@ -1,0 +1,25 @@
+<configuration>
+
+	<shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+ 
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/api-home-security.txt</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/archive/api-home-security.%d{yyyy-MM-dd}.txt</fileNamePattern>
+            <!-- keep 1 days' worth of history -->
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%-16thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+	<logger name="fr.aumjaud.antoine" level="DEBUG"/>
+
+    <root level="INFO" additivity="false">
+        <appender-ref ref="FILE"/>
+    </root>
+
+
+</configuration>

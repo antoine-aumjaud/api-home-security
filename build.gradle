@@ -4,8 +4,8 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-version = '0.0.1'
-def apiJavalibVersion = '1.7.0'
+version = '1.0.0'
+def apiJavalibVersion = '1.7.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -32,8 +32,8 @@ dependencies {
 	//Transitive dependencies
     compile 'org.slf4j:slf4j-api:1.7.25'
 	compile 'com.google.code.gson:gson:2.8.0'
-    //
-    //Spring boot
+	compile 'org.bouncycastle:bcpkix-jdk15on:1.52'
+      //Spring boot
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-jetty' //use jetty
 
@@ -56,3 +56,11 @@ jar {
     baseName =  project.property("name")
     version =   project.property("version")
 }
+
+task copyConfig(type: Copy) {
+    description = "Copy config file for bootRun tasks"
+    from(file('src/dist/conf/'))
+    into("$buildDir/resources/main/")
+}
+
+bootRun { dependsOn copyConfig }
