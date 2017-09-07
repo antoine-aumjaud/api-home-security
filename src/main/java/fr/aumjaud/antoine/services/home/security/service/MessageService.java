@@ -40,6 +40,8 @@ public class MessageService {
     public void desactivation() {
         notif("Alarme désactivée");
         changeNabaztagColor("green");
+
+        sendToChat("Alarme désactivée");
     }
 
     public void identified(String idLabel) {
@@ -57,7 +59,7 @@ public class MessageService {
         sendToNabaztag(nabaztagMessage.toString()); 
 
         //Chat message
-        sendToChat("Merci de valider la désactivation (" + sensorContext.get() + ")");
+        if(nb == 0) sendToChat("Merci de valider la désactivation (" + sensorContext.get() + ")");
     }
 
     public void intrusion() {

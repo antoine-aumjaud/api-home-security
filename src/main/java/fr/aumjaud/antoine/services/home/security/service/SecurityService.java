@@ -32,7 +32,7 @@ public class SecurityService {
     }
 
     public String desactivate(String id) {
-        String idLabel = applicationConfig.getProperty("nabaztag.tag." + id);
+        String idLabel = applicationConfig.getProperty("desactivate.id." + id);
         if(idLabel != null) {
             messageService.identified(idLabel);
             securityActivationManager.desactivateNow();
