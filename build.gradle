@@ -34,7 +34,7 @@ dependencies {
 	compile 'com.google.code.gson:gson:2.8.0'
 	compile 'org.bouncycastle:bcpkix-jdk15on:1.52'
       //Spring boot
-    compile 'org.springframework.boot:spring-boot-starter-web' {
+    compile('org.springframework.boot:spring-boot-starter-web') {
     	exclude group: 'ch.qos.logback:' //old version
 	}
     compile 'org.springframework.boot:spring-boot-starter-jetty' //use jetty
