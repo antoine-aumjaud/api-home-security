@@ -3,6 +3,7 @@ package fr.aumjaud.antoine.services.home.security.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.aumjaud.antoine.services.common.logger.ApplicationLogger;
 import fr.aumjaud.antoine.services.common.server.springboot.ApplicationConfig;
 import fr.aumjaud.antoine.services.home.security.model.SensorContext;
 
@@ -38,6 +39,7 @@ public class SecurityService {
             securityActivationManager.desactivateNow();
             return "desactivated";
         }
+        ApplicationLogger.getInstance().parameterIssue("Desactivation: Id '" + id + "' is not an active Id");
         return "unauthorized id";
     }
 
