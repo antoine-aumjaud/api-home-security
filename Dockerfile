@@ -9,4 +9,4 @@ COPY build/libs/api-home-security-*.jar api-home-security/api-home-security.jar
 VOLUME api-home-security/lib/conf
 VOLUME ./logs
 
-CMD    java -cp api-home-security/lib/conf/ -jar api-home-security/api-home-security.jar
+CMD    java -Dloader.path=api-home-security/lib/conf/ -jar api-home-security/api-home-security.jar

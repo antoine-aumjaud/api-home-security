@@ -64,5 +64,11 @@ task copyConfig(type: Copy) {
     from(file('src/dist/conf/'))
     into("$buildDir/resources/main/")
 }
-
 bootRun { dependsOn copyConfig }
+
+
+springBoot {
+    layout = "ZIP" 
+    //to add folder in classpath
+    //see https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-gradle-plugin.html#build-tool-plugins-gradle-configuration-layouts
+}
