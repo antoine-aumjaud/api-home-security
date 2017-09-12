@@ -14,17 +14,17 @@ public class SecurityResource {
     @Autowired
     SecurityService securityService;
 
-    @RequestMapping(value = "/secure/activate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/secure/activate")
     public String activate(@RequestParam boolean isImediate) {
         return securityService.activate(isImediate);
     }
 
-    @RequestMapping(value = "/secure/desactivate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/secure/desactivate")
     public String desactivate(@RequestParam String id) {
         return securityService.desactivate(id);
     }
 
-    @RequestMapping(value = "/secure/event/{sensorName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/secure/event/{sensorName}")
     public String event(@PathVariable String sensorName) {
         return securityService.event(sensorName);
     }
