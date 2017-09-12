@@ -15,7 +15,7 @@ import fr.aumjaud.antoine.services.common.security.WrongRequestException;
 @RestController
 public class SecurityResource {
     @Autowired
-    SecurityService securityService;
+    private SecurityService securityService;
 
     @RequestMapping(value = "/secure/activate")
     public String activate(@RequestParam boolean isImediate) {
