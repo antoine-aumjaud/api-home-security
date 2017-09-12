@@ -17,7 +17,7 @@
 
 	<logger name="fr.aumjaud.antoine" level="DEBUG"/>
 
-    <root level="INFO" additivity="false">
+    <root level="DEBUG" additivity="false">
         <appender-ref ref="FILE"/>
     </root>
 
