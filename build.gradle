@@ -24,8 +24,9 @@ if (!apiJavalibFile.exists()) {
 }
 
 configurations {
-    compile.exclude module: "spring-boot-starter-tomcat" //remove tomcat, use jetty
+//    compile.exclude module: "spring-boot-starter-tomcat" //remove tomcat, use jetty
 }
+
 
 dependencies {
 	compile name: 'api-javalib', version: apiJavalibVersion
@@ -37,7 +38,8 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web') {
     	exclude group: 'ch.qos.logback:' //old version
 	}
-    compile 'org.springframework.boot:spring-boot-starter-jetty' //use jetty
+    //do not use jetty becasue it's not allow not valid URL with % (send by synology SMS notification)
+    //compile 'org.springframework.boot:spring-boot-starter-jetty' //use jetty
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 
@@ -64,8 +66,12 @@ task copyConfig(type: Copy) {
     from(file('src/dist/conf/'))
     into("$buildDir/resources/main/")
 }
-bootRun { dependsOn copyConfig }
+bootRun { dependsOn copyConfig } 
+//add dist config only when task bootRun is executed
 
+bootRepackage {
+    mainClass = 'fr.aumjaud.antoine.services.home.security.LaunchServer'
+}
 
 springBoot {
     layout = "ZIP" 
