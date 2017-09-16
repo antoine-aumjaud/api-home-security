@@ -53,14 +53,14 @@ public class MessageService {
         LOGGER.info("Send an alerte ({})", nb);
 
         //Nabaztag message 
-        if(nb == 0) wakeUpNabaztag();
+        if(nb == 1) wakeUpNabaztag();
         StringBuilder nabaztagMessage = new StringBuilder("Merci de vous identifier");
         //  add spaces to avoid openjabnab filter
-        for (int i = 0; i < nb; i++) nabaztagMessage.append(" ");
+        for (int i = 1; i < nb; i++) nabaztagMessage.append(" ");
         sendToNabaztag(nabaztagMessage.toString()); 
 
         //Chat message
-        if(nb == 0) sendToChat("Merci de valider la désactivation (" + sensorContext.get() + ")");
+        if(nb == 1) sendToChat("Merci de valider la désactivation (" + sensorContext.get() + ")");
     }
 
     public void intrusion() {
