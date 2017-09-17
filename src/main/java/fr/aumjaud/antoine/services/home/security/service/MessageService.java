@@ -89,7 +89,7 @@ public class MessageService {
         boolean isAwake = content.contains("true");
         LOGGER.debug("Nabaztag awake status is: {}", isAwake);
         if(!isAwake) {
-            String urlWakeup = applicationConfig.getProperty("nabaztag.url") + applicationConfig.getProperty("nabaztag.url.path.wakeUp");
+            String urlWakeup = applicationConfig.getProperty("nabaztag.url") + applicationConfig.getProperty("nabaztag.url.path.wakeup");
             httpHelper.postData(urlWakeup, secureKey);
         }
     }
