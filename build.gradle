@@ -4,7 +4,7 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-version = '1.1.2'
+version = '1.1.3'
 def apiJavalibVersion = '1.7.1'
 
 sourceCompatibility = 1.8
@@ -24,7 +24,8 @@ if (!apiJavalibFile.exists()) {
 }
 
 configurations {
-//    compile.exclude module: "spring-boot-starter-tomcat" //remove tomcat, use jetty
+    //do not use jetty because it's not allow not valid URL with % (send by synology SMS notification)
+    //compile.exclude module: "spring-boot-starter-tomcat" //remove tomcat, use jetty
 }
 
 
@@ -38,7 +39,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web') {
     	exclude group: 'ch.qos.logback:' //old version
 	}
-    //do not use jetty becasue it's not allow not valid URL with % (send by synology SMS notification)
+    //do not use jetty because it's not allow not valid URL with % (send by synology SMS notification)
     //compile 'org.springframework.boot:spring-boot-starter-jetty' //use jetty
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'

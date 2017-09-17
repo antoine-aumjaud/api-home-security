@@ -1,5 +1,6 @@
 package fr.aumjaud.antoine.services.home.security.requesthandler;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +33,11 @@ public class SecurityResource {
         return securityService.event(sensorName);
     }
 
-    private final static Pattern CAMERA_MESG_PATTERN = Pattern.compile("\\W");
     @RequestMapping(value = "/secure/event/camera")
     public String eventCamera(@RequestParam String message) {
-        String[] items = CAMERA_MESG_PATTERN.split(message, 2);
-        if(items == null || items.length < 2) {
+        if(message.length() < 7) {
             throw new WrongRequestException("wrong message", "event/camera: " + message + " doesn't match pattern");
         }
-        return securityService.event("camera " + items[1]);
+        return securityService.event("camera " + message.substring(7, 12)); // bug in synology message (send invalid HTTP caracters)
     }
 }
