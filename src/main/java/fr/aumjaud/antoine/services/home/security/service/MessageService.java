@@ -42,7 +42,7 @@ public class MessageService {
         notif("Alarme désactivée");
         changeNabaztagColor("green");
 
-        sendToChat("Alarme désactivée");
+        sendToChat("Alarme désactivée", false);
     }
 
     public void identified(String idLabel) {
@@ -60,7 +60,7 @@ public class MessageService {
         sendToNabaztag(nabaztagMessage.toString()); 
 
         //Chat message
-        if(nb == 1) sendToChat("Merci de valider la désactivation (" + sensorContext.get() + ")");
+        if(nb == 1) sendToChat("Merci de valider la désactivation (" + sensorContext.get() + ")", false);
     }
 
     public void intrusion() {
@@ -73,7 +73,7 @@ public class MessageService {
         sendToSMS("Intrusion détectée : " + sensorContext.get());
 
         //Chat message
-        sendToChat("Intrusion détectée : " + sensorContext.get());
+        sendToChat("Intrusion détectée : " + sensorContext.get(), true);
 
         //Email message
         sendToMail("Intrusion détectée : " + sensorContext.get());
@@ -126,10 +126,11 @@ public class MessageService {
         }
     }
 
-    private void sendToChat(String message) {
+    private void sendToChat(String message, boolean isAlerte) {
         LOGGER.debug("Send to Chat: {}", message);
 
-        String url = applicationConfig.getProperty("synology-chatbot.url");
+        String url = applicationConfig.getProperty(isAlerte ? 
+            "synology-chatbot-alerte.url" : "synology-chatbot-info.url");
         String secureKey = applicationConfig.getProperty("synology-chatbot.secure-key");
         HttpMessage httpMessage = new HttpMessageBuilder(url).setSecureKey(secureKey)
                 .setJsonMessage("{ \"message\": \"" + message + "\"}").build();
