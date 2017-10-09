@@ -129,8 +129,8 @@ public class MessageService {
     private void sendToChat(String message, boolean isAlerte) {
         LOGGER.debug("Send to Chat: {}", message);
 
-        String url = applicationConfig.getProperty(isAlerte ? 
-            "synology-chatbot-alerte.url" : "synology-chatbot-info.url");
+        String url = applicationConfig.getProperty("synology-chatbot.url")
+            + applicationConfig.getProperty(isAlerte ? "synology-chatbot.path.alerte" : "synology-chatbot.path.info");
         String secureKey = applicationConfig.getProperty("synology-chatbot.secure-key");
         HttpMessage httpMessage = new HttpMessageBuilder(url).setSecureKey(secureKey)
                 .setJsonMessage("{ \"message\": \"" + message + "\"}").build();
