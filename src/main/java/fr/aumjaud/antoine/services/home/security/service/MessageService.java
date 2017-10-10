@@ -36,6 +36,8 @@ public class MessageService {
     public void activation() {
         notif("Alarme active");
         changeNabaztagColor("red");
+        
+        sendToChat("Alarme activée", false);
     }
 
     public void desactivation() {
@@ -47,6 +49,8 @@ public class MessageService {
 
     public void identified(String idLabel) {
         notif("Bonjour " + idLabel);
+        
+        sendToChat("Identification par " + idLabel, false);
     }
 
     public void alerte(int nb) {
