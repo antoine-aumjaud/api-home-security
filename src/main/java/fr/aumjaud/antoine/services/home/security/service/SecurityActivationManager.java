@@ -86,15 +86,13 @@ public class SecurityActivationManager {
 
                 switch (action) {
                 case ACTIVATE_NOW:
+                    resetSates();
                     isActivated = true;
-                    activateActionStep = 0;
-                    eventActionStep = 0;
                     messageService.activation();
                     break;
                 case DESACTIVATE_NOW:
                     isActivated = false;
-                    activateActionStep = 0;
-                    eventActionStep = 0;
+                    resetSates();
                     messageService.desactivation();
                     break;
                 case ACTIVATE:
@@ -117,8 +115,8 @@ public class SecurityActivationManager {
                         break;
                     case 4:
                         messageService.activation();
+                        resetSates();
                         isActivated = true;
-                        activateActionStep = 0;
                         break;
                     default:
                         LOGGER.debug(" default activateActionStep");
@@ -129,7 +127,7 @@ public class SecurityActivationManager {
                         messageService.alerte(eventActionStep);
                         launchAction(10);
                     } else {
-                        eventActionStep = 0;
+                        resetSates();
                         messageService.intrusion();
                     }
                     break;
@@ -142,9 +140,15 @@ public class SecurityActivationManager {
         private void launchAction(int timeInMs) {
             pendingActionRunnable.setDelay(timeInMs);
             synchronized (pendingLock) {
-                LOGGER.trace("action : signal PENDING launch");
+                LOGGER.trace("action: signal PENDING launch");
                 pendingLock.notify();
             }
+        }
+
+        private void resetSates() {
+            activateActionStep = 0;
+            eventActionStep = 0;
+            action = Action.NOTHING;
         }
     }
 
@@ -170,7 +174,7 @@ public class SecurityActivationManager {
                 }
                 synchronized(actionLock) {
                     actionLock.notify();
-                    LOGGER.trace("--pending:  signal ACTION launch");
+                    LOGGER.trace("--pending: signal ACTION launch");
                 } 
             }
         }
