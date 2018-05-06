@@ -3,7 +3,6 @@ API - Home Security
 
 [![Build Status](https://travis-ci.org/antoine-aumjaud/api-home-security.svg?branch=master)](https://travis-ci.org/antoine-aumjaud/api-home-security)
 
-
 My Synology Surveillance Station send a hook every time a motion event is detected by Camera to this "SMS provider". 
 This micro-service is not an SMS provider, but it is the only way I've found to send an event to an URL when a motion event is detected by Surveillance Station.
 
