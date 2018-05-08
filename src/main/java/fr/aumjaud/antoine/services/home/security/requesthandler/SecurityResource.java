@@ -1,10 +1,6 @@
 package fr.aumjaud.antoine.services.home.security.requesthandler;
 
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +13,11 @@ import fr.aumjaud.antoine.services.common.security.WrongRequestException;
 public class SecurityResource {
     @Autowired
     private SecurityService securityService;
+
+    @RequestMapping(value = "/secure/isActivated")
+    public boolean isActivated() {
+        return securityService.isActivated();
+    }
 
     @RequestMapping(value = "/secure/activate")
     public String activate(@RequestParam boolean isImediate) {

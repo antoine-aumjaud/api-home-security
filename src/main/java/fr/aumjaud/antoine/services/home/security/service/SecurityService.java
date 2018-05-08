@@ -22,6 +22,10 @@ public class SecurityService {
     @Autowired
     private SecurityActivationManager securityActivationManager;
 
+    public boolean isActivated() {
+        return securityActivationManager.isActivated();
+    }
+    
     public String activate(boolean isImmediate) {
         if (isImmediate) {
             securityActivationManager.activateNow();
