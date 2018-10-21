@@ -4,12 +4,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SensorContext {
-    private String context;
+    private String source;
+    private String image;
 
-    public void set(String context) {
-        this.context = context;
+    public void set(String source, String image) {
+        this.source = source;
     }
-    public String get() {
-        return context;
+    public String getSource() {
+        return source;
+    }
+    public String getImage() {
+        return image;
     }
 }

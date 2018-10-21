@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.aumjaud.antoine.services.common.http.HttpCode;
 import fr.aumjaud.antoine.services.common.http.HttpHelper;
 import fr.aumjaud.antoine.services.common.http.HttpMessage;
 import fr.aumjaud.antoine.services.common.http.HttpMessageBuilder;
@@ -37,20 +38,20 @@ public class MessageService {
         notif("Alarme active");
         changeNabaztagColor("red");
         
-        sendToChat("Alarme activée", false);
+        sendToChatInfo("Alarme activée", null);
     }
 
     public void desactivation() {
         notif("Alarme désactivée");
         changeNabaztagColor("green");
 
-        sendToChat("Alarme désactivée", false);
+        sendToChatInfo("Alarme désactivée", null);
     }
 
     public void identified(String idLabel) {
         notif("Bonjour " + idLabel);
         
-        sendToChat("Identification par " + idLabel, false);
+        sendToChatInfo("Identification par " + idLabel, null);
     }
 
     public void alerte(int nb) {
@@ -64,7 +65,7 @@ public class MessageService {
         sendToNabaztag(nabaztagMessage.toString()); 
 
         //Chat message
-        if(nb == 1) sendToChat("Merci de valider la désactivation (" + sensorContext.get() + ")", false);
+        if(nb == 1) sendToChatInfo("Merci de valider la désactivation (" + sensorContext.getSource() + ")", sensorContext.getImage());
     }
 
     public void intrusion() {
@@ -74,13 +75,13 @@ public class MessageService {
         sendToNabaztag("Intrusion non autorisée, alerte lancée");
 
         //SMS message
-        sendToSMS("Intrusion détectée : " + sensorContext.get());
+        sendToSMS("Intrusion détectée : " + sensorContext.getSource());
 
-        //Chat message
-        sendToChat("Intrusion détectée : " + sensorContext.get(), true);
+        //Chat message 
+        sendToChatAlerte("Intrusion détectée : " + sensorContext.getSource());
 
         //Email message
-        sendToMail("Intrusion détectée : " + sensorContext.get());
+        sendToMail("Intrusion détectée : " + sensorContext.getSource());
     }
 
     private void wakeUpNabaztag() {
@@ -122,19 +123,28 @@ public class MessageService {
         LOGGER.debug("Send to SMS: {}", message);
 
         for (String user : applicationConfig.getProperty("sms.users").split(";")) {
-            String url = String.format(applicationConfig.getProperty("sms.url"),
-                    applicationConfig.getProperty("sms.user." + user + ".id"),
-                    applicationConfig.getProperty("sms.user." + user + ".token"), //
-                    message);
-            httpHelper.getData(url);
+            sendSMS(user, message);
         }
     }
-
-    private void sendToChat(String message, boolean isAlerte) {
+    
+    private void sendToChatInfo(String message, String image) {
         LOGGER.debug("Send to Chat: {}", message);
 
         String url = applicationConfig.getProperty("synology-chatbot.url")
-            + applicationConfig.getProperty(isAlerte ? "synology-chatbot.path.alerte" : "synology-chatbot.path.info");
+            + applicationConfig.getProperty("synology-chatbot.path.info");
+        String secureKey = applicationConfig.getProperty("synology-chatbot.secure-key");
+        HttpMessage httpMessage = new HttpMessageBuilder(url).setSecureKey(secureKey)
+                .setJsonMessage("{ \"message\": \"" + message + "\", "
+                + "\"url\": \"" + image + "\"" 
+                + "\"}").build();
+        httpHelper.postData(httpMessage);
+    }
+
+    private void sendToChatAlerte(String message) {
+        LOGGER.debug("Send to Chat: {}", message);
+
+        String url = applicationConfig.getProperty("synology-chatbot.url")
+            + applicationConfig.getProperty("synology-chatbot.path.alerte");
         String secureKey = applicationConfig.getProperty("synology-chatbot.secure-key");
         HttpMessage httpMessage = new HttpMessageBuilder(url).setSecureKey(secureKey)
                 .setJsonMessage("{ \"message\": \"" + message + "\"}").build();
@@ -144,5 +154,14 @@ public class MessageService {
     private void sendToMail(String message) {
         //TODO ??
         //  Add sensor info (image, video link) ?
+    }
+
+    public boolean sendSMS(String user, String message) {
+        String url = String.format(applicationConfig.getProperty("sms.url"),
+                applicationConfig.getProperty("sms.user." + user + ".id"),
+                applicationConfig.getProperty("sms.user." + user + ".token"), //
+                message);
+        HttpResponse response = httpHelper.getData(url);
+        return response.getHttpCode() == HttpCode.OK;
     }
 }

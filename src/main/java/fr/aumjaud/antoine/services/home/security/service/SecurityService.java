@@ -51,7 +51,8 @@ public class SecurityService {
         if (!securityActivationManager.isActivated()) {
             return "security is desactivated";
         } else {
-            sensorContext.set(sensorName);
+            String url = applicationConfig.getProperty("event." + sensorName + ".image.url");
+            sensorContext.set(sensorName, url); 
             securityActivationManager.event();
             return "event sent";
         } 
