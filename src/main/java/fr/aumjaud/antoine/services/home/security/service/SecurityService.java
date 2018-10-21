@@ -1,5 +1,7 @@
 package fr.aumjaud.antoine.services.home.security.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import fr.aumjaud.antoine.services.home.security.model.SensorContext;
 
 @Service
 public class SecurityService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityService.class);
 
     @Autowired
     private ApplicationConfig applicationConfig;
@@ -50,7 +53,8 @@ public class SecurityService {
     public String event(String sensorName) {
         if (!securityActivationManager.isActivated()) {
             return "security is desactivated";
-        } else {
+        } 
+        else {
             String url = applicationConfig.getProperty("event." + sensorName.replaceAll(" ", "_") + ".image.url");
             sensorContext.set(sensorName, url); 
             securityActivationManager.event();

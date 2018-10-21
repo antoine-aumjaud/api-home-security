@@ -9,6 +9,7 @@ public class SensorContext {
 
     public void set(String source, String image) {
         this.source = source;
+        this.image = image;
     }
     public String getSource() {
         return source;
