@@ -136,7 +136,7 @@ public class MessageService {
         HttpMessage httpMessage = new HttpMessageBuilder(url).setSecureKey(secureKey)
                 .setJsonMessage("{ \"message\": \"" + message + "\", "
                 + "\"url\": \"" + image + "\"" 
-                + "\"}").build();
+                + "}").build();
         httpHelper.postData(httpMessage);
     }
 
