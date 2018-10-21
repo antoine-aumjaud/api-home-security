@@ -1,5 +1,8 @@
 package fr.aumjaud.antoine.services.home.security.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,10 +136,11 @@ public class MessageService {
         String url = applicationConfig.getProperty("synology-chatbot.url")
             + applicationConfig.getProperty("synology-chatbot.path.info");
         String secureKey = applicationConfig.getProperty("synology-chatbot.secure-key");
+        List<String> payload = new ArrayList<>();
+        payload.add("\"message\": \"" + message + "\"");
+        if(image != null) payload.add("\"url\": \"" + image + "\"");
         HttpMessage httpMessage = new HttpMessageBuilder(url).setSecureKey(secureKey)
-                .setJsonMessage("{ \"message\": \"" + message + "\", "
-                + "\"url\": \"" + image + "\"" 
-                + "}").build();
+                .setJsonMessage(String.format("{%s}", String.join(", ", payload))).build();
         httpHelper.postData(httpMessage);
     }
 
