@@ -81,7 +81,7 @@ public class MessageService {
         sendToSMS("Intrusion détectée : " + sensorContext.getSource());
 
         //Chat message 
-        sendToChatAlerte("Intrusion détectée : " + sensorContext.getSource());
+        sendToChatIntrusion("Intrusion détectée : " + sensorContext.getSource());
 
         //Email message
         sendToMail("Intrusion détectée : " + sensorContext.getSource());
@@ -144,7 +144,7 @@ public class MessageService {
         httpHelper.postData(httpMessage);
     }
 
-    private void sendToChatAlerte(String message) {
+    private void sendToChatIntrusion(String message) {
         LOGGER.debug("Send to Chat: {}", message);
 
         String url = applicationConfig.getProperty("synology-chatbot.url")
