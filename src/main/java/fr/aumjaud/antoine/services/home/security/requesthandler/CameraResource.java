@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.aumjaud.antoine.services.common.security.WrongRequestException;
 import fr.aumjaud.antoine.services.common.server.springboot.ApplicationConfig;
 
 @RestController
@@ -25,11 +26,14 @@ public class CameraResource {
 
     @RequestMapping(value = "/secure/camera/{sensorName}.jpg", method = RequestMethod.GET) 
     public void getCameraImage(HttpServletResponse response, @PathVariable String sensorName)  throws IOException {
-        response.setContentType("image/jpeg");
-        response.setHeader("Pragma", CacheControl.noCache().getHeaderValue());
-        
         String imgUrl = applicationConfig.getProperty("camera." + sensorName + ".image.url");
         String imgAuth = applicationConfig.getProperty("camera." + sensorName + ".image.auth");
+        
+        if(imgUrl == null)  
+            throw new WrongRequestException("wrong sensor name", "get camera image: " + sensorName + " doesn't exit");
+
+        response.setContentType("image/jpeg");
+        response.setHeader("Pragma", CacheControl.noCache().getHeaderValue());
         
         URL url = new URL(imgUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
