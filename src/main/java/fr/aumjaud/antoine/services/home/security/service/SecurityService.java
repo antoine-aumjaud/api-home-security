@@ -52,7 +52,7 @@ public class SecurityService {
             return "security is desactivated";
         } 
         else {
-            String url = String.format(applicationConfig.getProperty("event.camera.image.url"), sensorName.replaceAll(" ", "_")));
+            String url = String.format(applicationConfig.getProperty("event.camera.image.url"), sensorName.replaceAll(" ", "_"));
             sensorContext.set(sensorName, url); 
             securityActivationManager.event();
             return "event sent";
